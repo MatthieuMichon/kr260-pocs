@@ -100,6 +100,10 @@ catch {report_utilization -hierarchical -hierarchical_min_primitive_count 0 -fil
 
 set_property BITSTREAM.GENERAL.COMPRESS TRUE [current_design]
 set_property BITSTREAM.CONFIG.USR_ACCESS TIMESTAMP [current_design]
-set_property BITSTREAM.CONFIG.USERID [dict get $arg_dict GIT_COMMIT] [current_design]
 write_bitstream -force -logic_location_file -file fpga.bit
-write_debug_probes -force [string map {bit ltx} [glob *.bit]] -verbose
+
+open_hw_manager
+connect_hw_server
+open_hw_target
+set_property PROGRAM.FILE {fpga.bit} [current_hw_device]
+program_hw_devices [current_hw_device]
