@@ -2,7 +2,9 @@ The Xilinx Zynq UltraScale+ devices contain a two clusters of ARM cores and quit
 
 - [x] Open JTAG chain
 - [x] Set JTAG-TAP in USER4 mode
-- [ ] Wire USER4 mode state to an user LED
+- [x] Wire USER4 mode state to an user LED
+- [x] Confirm USER4 mode was entered by monitoring the user LED
+- [ ] Assign JTAG TAP ingress bit to the second user LED and check for activity of the latter
 
 # Notes
 
