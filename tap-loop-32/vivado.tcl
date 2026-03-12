@@ -65,6 +65,8 @@ program_hw_devices [current_hw_device]
 close_hw_target
 open_hw_target -jtag_mode on
 run_state_hw_jtag RESET; # this clears instruction register
-run_state_hw_jtag IDLE
 set zynqmp_ir_length 12
-set zynq7_ir_user4 $zynqmp_ir_length -tdi 0x923
+set zynqmp_ir_user4 0x923
+run_state_hw_jtag RESET; # this clears instruction register
+run_state_hw_jtag IDLE
+scan_ir_hw_jtag $zynqmp_ir_length -tdi $zynqmp_ir_user4
