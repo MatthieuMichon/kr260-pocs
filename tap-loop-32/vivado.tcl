@@ -3,6 +3,26 @@ package require Vivado
 create_project -part xck26-sfvc784-2LV-c -in_memory
 read_verilog -sv [lsearch -all -inline -not [glob ../*.sv] *_tb.sv]
 read_xdc [glob ../*.xdc]
+
+# Add ILA IP
+
+save_project_as -force test_[lindex [find_top] 0]
+set ila_tap [create_ip -name ila -vendor xilinx.com -module_name ila_tap]
+set_property -dict [list \
+    CONFIG.C_DATA_DEPTH 131072 \
+    CONFIG.C_NUM_OF_PROBES 1 \
+    CONFIG.C_PROBE0_WIDTH 36 \
+    CONFIG.C_INPUT_PIPE_STAGES 1 \
+    CONFIG.C_EN_STRG_QUAL False \
+] [get_ips ila_tap]
+generate_target {instantiation_template} [get_files $ila_tap]
+generate_target -force synthesis [get_files $ila_tap]
+config_ip_cache -export [get_ips -all ila_tap]
+export_ip_user_files -of_objects [get_files $ila_tap] -no_script -sync -force -quiet
+create_ip_run [get_files -of_objects [get_fileset sources_1] $ila_tap]
+launch_runs ila_tap_synth_1
+wait_on_run ila_tap_synth_1
+
 # Synthesize Design
 
 set directive RuntimeOptimized; # speed-run the build process

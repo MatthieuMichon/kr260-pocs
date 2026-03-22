@@ -55,6 +55,14 @@ tap_decoder #(
         .inbound_valid(tap_valid),
         .inbound_data(tap_data));
 
+logic [36-1:0] ila_probe0;
+
+assign ila_probe0 = {test_logic_reset, run_test_idle, ir_is_user, tap_valid, tap_data};
+
+ila_tap ila_tap_i (
+    .clk(tck),
+    .probe0(ila_probe0));
+
 tap_encoder #(
     .OUTBOUND_DATA_WIDTH(DATA_WIDTH)
 ) tap_encoder_i (
