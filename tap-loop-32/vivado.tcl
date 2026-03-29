@@ -1,5 +1,19 @@
 package require Vivado
 
+# Safely report propoerties for all hw devices
+proc ::safe_report_propery_hw_devices {} {
+    foreach hw_device [get_hw_devices] {
+        foreach property [list_property $hw_device] {
+            if {[catch {set value [get_property -quiet $property $hw_device]} err]} {
+                # For some reason some properites are not reported
+                puts "Skipping property $p: Error detected"
+            } else {
+                puts "$property = $value"
+            }
+        }
+    }
+}
+
 create_project -part xck26-sfvc784-2LV-c -in_memory
 read_verilog -sv [lsearch -all -inline -not [glob ../*.sv] *_tb.sv]
 read_xdc [glob ../*.xdc]
@@ -90,3 +104,5 @@ set zynqmp_ir_user4 0x923
 run_state_hw_jtag RESET; # this clears instruction register
 run_state_hw_jtag IDLE
 scan_ir_hw_jtag $zynqmp_ir_length -tdi $zynqmp_ir_user4
+
+::safe_report_propery_hw_devices

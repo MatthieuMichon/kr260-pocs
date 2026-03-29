@@ -2,7 +2,6 @@ VIVADO_MODE ?= batch
 VIVADO_TASK ?= all
 TIMESTAMP := $(shell date -u +"%y%m%dT%H%M%SZ")
 VIVADO_BUILD_DIR := synth__$(TIMESTAMP)
-TIMESTAMP := $(shell date -u +"%y%m%dT%H%M%SZ")
 SV_SOURCES := $(filter-out shell.sv, $(wildcard *.sv))
 VIVADO_FLAGS := -notrace -nojournal -mode $(VIVADO_MODE) -script ../vivado.tcl
 
